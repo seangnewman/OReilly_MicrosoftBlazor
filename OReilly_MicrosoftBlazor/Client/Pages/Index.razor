@@ -1,6 +1,14 @@
 ﻿@page "/"
-<Alert Show="@ShowAlert">
+<DismissableAlert @ref="alert" @bind-Show="@ShowAlert">
     <span class="oi oi-check mr-2" aria-hidden="true"></span>
     <strong>Blazor is soo cool!</strong>
-</Alert>
+</DismissableAlert>
+<Timer TimeInSeconds="5" Tick="@( () => alert.Dismiss() )" />
 <button @onclick="@ToggleAlert">Toggle</button>
+
+<GrandMother>
+    <GrandChild/>
+    <DismissableAlert Show="true">
+        <GrandChild/>
+    </DismissableAlert>
+</GrandMother>

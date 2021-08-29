@@ -12,35 +12,61 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
+
+    @*<table class="table">
+            <thead>
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <th>Date</th>
+                    <th>Temp. (C)</th>
+                    <th>Temp. (F)</th>
+                    <th>Summary</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var forecast in forecasts)
+                {
+                    <tr>
+                        <td>@forecast.Date.ToShortDateString()</td>
+                        <td>@forecast.TemperatureC</td>
+                        <td>@forecast.TemperatureF</td>
+                        <td>@forecast.Summary</td>
+                    </tr>
+                }
+            </tbody>
+        </table>*@
+
+    <Grid Items="forecasts" TItem="WeatherForecast">
+        <Header>
+        <th>Date</th>
+        <th>Temp. (C)</th>
+        <th>Temp. (F)</th>
+        <th>Summary</th>
+        </Header>
+        <Row Context="forecast">
+            <!-- by default called context -->
+            <td>@forecast.Date</td>
+            <td>@forecast.TemperatureC</td>
+            <td>@forecast.TemperatureF</td>
+            <td>@forecast.Summary</td>
+        </Row>
+        <Footer>
+        <td colspan="4">Spring is in the air!</td>
+        </Footer>
+    </Grid>
+
+    <ListView Items="forecasts">
+        <ItemTemplate>
+            @forecastTemplate(context)
+        </ItemTemplate>
+    </ListView>
+
 }
 
-@code {
-    private WeatherForecast[] forecasts;
+@code{
 
-    protected override async Task OnInitializedAsync()
-    {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-    }
+    RenderFragment<WeatherForecast> forecastTemplate = (forecast)
+    =>@<li>@forecast.Date.ToLongDateString() - @forecast.Summary</li>;
 
 }
+
+
